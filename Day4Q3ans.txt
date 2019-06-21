@@ -1,0 +1,135 @@
+app html
+--------
+
+
+<div style="text-align:center">
+  <h1>  {{title}}  </h1>
+    <a [routerLink]="['/employee-list']">Get</a>
+</div>
+
+<div class="outlet-outlet">
+<router-outlet></router-outlet>
+
+</div>
+
+-------------------------------
+
+app ts
+----------
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'Welcome to Employee Details!';
+}
+
+-------------------------------
+employee html
+---------------
+
+<div class="form_container">
+  <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+    <h3>Add Employee</h3>
+    <table>
+    <tr><td>FirstName:</td><td><input type="text" class="fname" name="fname" formControlName="fname" /></td></tr>
+    
+    <tr><td>Phone No:</td><td><input type="text" name="lname" class="lname" formControlName="phoneno" /></td></tr>
+    
+      <tr><td>Email:</td><td><input type="text" name="phoneno" class="phoneno" formControlName="email" /></td></tr>
+   
+    <button type="submit" class="button" value="Submit">Submit</button>
+  </table>
+  </form>
+</div>
+<br />
+
+<div id="custtable"style="display:none;margin:10 auto;">
+  <hr/>
+  <table>
+     
+    <tr >
+  
+  <th>First Name</th>
+      <th>Phone No</th>
+      <th>Email</th>
+  
+
+    <tr>
+   
+      <td *ngFor="let data of cutomerdata">
+        <div id="result">
+          <h5>{{data}}</h5>
+        </div>   
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+
+-----------------------------------------
+
+employee ts
+-------------
+
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+@Component({
+  selector: 'app-employee-list',
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.css']
+})
+export class EmployeeListComponent implements OnInit {
+  formdata;
+  cutomerdata;
+
+  stateCtrl: FormControl;
+  ngOnInit() {
+      this.formdata = new FormGroup({
+          fname: new FormControl(''),
+          phoneno: new FormControl(''),
+          email:new FormControl('')
+         
+      });
+  }
+  onClickSubmit(data) {
+      document.getElementById('custtable').style.display = '';
+      this.cutomerdata = [];
+      for (var prop in data) {
+          this.cutomerdata.push(data[prop]);
+      }
+      console.log(this.cutomerdata);
+  }
+  }
+
+
+
+---------------------------------------
+
+routing module
+-------------
+
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { EmployeeListComponent } from './employee-list/employee-list.component';
+const routes: Routes = [
+  {
+    path:'employee-list',
+    component:EmployeeListComponent
+  }
+];
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+
+
+------------------------------------------
